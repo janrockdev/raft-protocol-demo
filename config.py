@@ -6,7 +6,9 @@ import os
 NODES = {
     'node1': {'host': '127.0.0.1', 'port': 3000},
     'node2': {'host': '127.0.0.1', 'port': 4000},
-    'node3': {'host': '127.0.0.1', 'port': 5000}
+    'node3': {'host': '127.0.0.1', 'port': 5000},
+    'node4': {'host': '127.0.0.1', 'port': 6000},
+    'node5': {'host': '127.0.0.1', 'port': 7000}
 }
 
 # Raft timing configuration (in seconds)
