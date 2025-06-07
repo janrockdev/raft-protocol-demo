@@ -361,14 +361,23 @@ class CacheHTTPServer:
             runner = web.AppRunner(self.app)
             await runner.setup()
             
-            # Bind to localhost with proper error handling
-            site = web.TCPSite(runner, "127.0.0.1", self.raft_node.port)
-            await site.start()
+            # Bind with proper error handling and retry logic
+            max_retries = 3
+            for attempt in range(max_retries):
+                try:
+                    site = web.TCPSite(runner, "0.0.0.0", self.raft_node.port)
+                    await site.start()
+                    break
+                except OSError as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    self.logger.warning(f"Port binding attempt {attempt + 1} failed: {e}")
+                    await asyncio.sleep(1)
             
             # Verify the server is actually listening
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.2)
             
-            self.logger.info(f"HTTP server started on 127.0.0.1:{self.raft_node.port}")
+            self.logger.info(f"HTTP server started on 0.0.0.0:{self.raft_node.port}")
             
             # Store runner for cleanup
             self.runner = runner
