@@ -7,16 +7,26 @@ import asyncio
 import json
 import subprocess
 import time
+from config import NODES
 
 class SimpleDashboard:
     def __init__(self):
         self.app = web.Application()
         self.session = None
+        self.latest_performance = {
+            'ops_per_second': 0,
+            'avg_latency_ms': 0,
+            'last_test_time': None,
+            'successful_ops': 0,
+            'total_ops': 0
+        }
         self._setup_routes()
 
     def _setup_routes(self):
         self.app.router.add_get('/', self.dashboard)
         self.app.router.add_get('/api/status', self.get_status)
+        self.app.router.add_get('/api/performance', self.get_performance)
+        self.app.router.add_get('/api/leader', self.get_leader)
         self.app.router.add_post('/api/test', self.run_test)
 
     async def dashboard(self, request):
@@ -378,6 +388,104 @@ class SimpleDashboard:
             background: #ef4444;
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
         }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .node-stats-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .node-stats-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .node-stats-card.offline {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .node-header h4 {
+            margin: 0;
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.online {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.offline {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .stats-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: #1f2937;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .stat-value.good {
+            color: #059669;
+        }
+
+        .stat-value.fair {
+            color: #d97706;
+        }
+
+        .stat-value.poor {
+            color: #dc2626;
+        }
         
         @media (max-width: 768px) {
             .container {
@@ -472,6 +580,13 @@ class SimpleDashboard:
                     <label for="cache-ttl">TTL (seconds)</label>
                     <input type="number" id="cache-ttl" placeholder="Time to live in seconds">
                 </div>
+                <div class="form-group">
+                    <label for="target-mode">Target Node</label>
+                    <select id="target-mode">
+                        <option value="leader">Current Leader (Consistent Writes/Reads)</option>
+                        <option value="any">Any Available Node (Fast Reads)</option>
+                    </select>
+                </div>
                 <div class="button-group">
                     <button class="btn btn-success" onclick="setCache()">
                         <i class="fas fa-plus"></i> Set
@@ -507,6 +622,8 @@ class SimpleDashboard:
                     <select id="target-node">
                         <option value="node2">Node 2 (Port 4000)</option>
                         <option value="node3">Node 3 (Port 5000)</option>
+                        <option value="node4">Node 4 (Port 6000)</option>
+                        <option value="node5">Node 5 (Port 7000)</option>
                     </select>
                 </div>
                 <div class="button-group">
@@ -518,6 +635,21 @@ class SimpleDashboard:
                     </button>
                 </div>
                 <div id="sim-result" class="result-container" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-chart-bar"></i> Cache Statistics</h3>
+            <div id="cache-stats-container">
+                <div class="loading"></div> Loading cache statistics...
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="refreshCacheStats()">
+                    <i class="fas fa-sync-alt"></i> Refresh Stats
+                </button>
+                <button class="btn" onclick="exportCacheStats()">
+                    <i class="fas fa-download"></i> Export CSV
+                </button>
             </div>
         </div>
 
@@ -559,6 +691,59 @@ class SimpleDashboard:
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             log('Log downloaded');
+        }
+
+        async function updatePerformanceMetrics() {
+            try {
+                const response = await fetch('/api/performance');
+                const data = await response.json();
+                
+                if (data.ops_per_second > 0) {
+                    document.getElementById('ops-per-sec').textContent = data.ops_per_second.toFixed(1);
+                } else {
+                    document.getElementById('ops-per-sec').textContent = '-';
+                }
+            } catch (error) {
+                document.getElementById('ops-per-sec').textContent = '-';
+            }
+        }
+
+        async function getLeaderUrl() {
+            try {
+                const response = await fetch('/api/leader');
+                const data = await response.json();
+                return data.available ? data.leader_url : null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        async function getAnyAvailableNodeUrl() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                // Find any healthy node
+                for (const [nodeName, nodeInfo] of Object.entries(data.nodes || {})) {
+                    if (nodeInfo.healthy) {
+                        return `http://${nodeInfo.host}:${nodeInfo.port}`;
+                    }
+                }
+                return null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        async function getTargetNodeUrl() {
+            const targetMode = document.getElementById('target-mode').value;
+            
+            if (targetMode === 'leader') {
+                return await getLeaderUrl();
+            } else if (targetMode === 'any') {
+                return await getAnyAvailableNodeUrl();
+            }
+            return null;
         }
 
         function showNotification(message, type = 'info') {
@@ -666,6 +851,9 @@ class SimpleDashboard:
                 document.getElementById('leader-count').textContent = leaderCount;
                 document.getElementById('current-term').textContent = maxTerm;
                 
+                // Update performance data
+                await updatePerformanceMetrics();
+                
                 document.getElementById('cluster-status').innerHTML = html || '<div class="node-status unhealthy"><div class="node-name">No nodes available</div></div>';
                 log('Refreshed cluster status');
             } catch (error) {
@@ -693,8 +881,20 @@ class SimpleDashboard:
             resultContainer.style.display = 'block';
             resultContainer.innerHTML = '<div class="loading"></div> Setting cache value...';
 
+            // For write operations, always use leader
+            const leaderUrl = await getLeaderUrl();
+            if (!leaderUrl) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: No leader available in cluster (writes require leader)
+                    </div>
+                `;
+                showNotification('No leader available in cluster', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://127.0.0.1:3000/cache/' + encodeURIComponent(key), {
+                const response = await fetch(leaderUrl + '/cache/' + encodeURIComponent(key), {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({value: value, ttl: ttl ? parseInt(ttl) : undefined})
@@ -740,26 +940,41 @@ class SimpleDashboard:
             resultContainer.style.display = 'block';
             resultContainer.innerHTML = '<div class="loading"></div> Getting cache value...';
 
+            const targetMode = document.getElementById('target-mode').value;
+            const targetUrl = await getTargetNodeUrl();
+            const nodeType = targetMode === 'leader' ? 'leader' : 'available node';
+            
+            if (!targetUrl) {
+                const errorMsg = `No ${nodeType} available in cluster`;
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: ${errorMsg}
+                    </div>
+                `;
+                showNotification(errorMsg, 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://127.0.0.1:3000/cache/' + encodeURIComponent(key));
+                const response = await fetch(targetUrl + '/cache/' + encodeURIComponent(key));
                 const result = await response.json();
                 
                 if (response.ok && result.success) {
                     resultContainer.innerHTML = `
                         <div style="color: #10b981; margin-bottom: 10px;">
-                            <i class="fas fa-check-circle"></i> Cache retrieved successfully
+                            <i class="fas fa-check-circle"></i> Cache retrieved successfully from ${nodeType}
                         </div>
                         <pre>${JSON.stringify(result, null, 2)}</pre>
                     `;
                 } else {
                     resultContainer.innerHTML = `
                         <div style="color: #f59e0b; margin-bottom: 10px;">
-                            <i class="fas fa-info-circle"></i> Key not found or expired
+                            <i class="fas fa-info-circle"></i> Key not found or expired on ${nodeType}
                         </div>
                         <pre>${JSON.stringify(result, null, 2)}</pre>
                     `;
                 }
-                log(`Retrieved cache key: ${key}`);
+                log(`Retrieved cache key: ${key} from ${nodeType}`);
             } catch (error) {
                 resultContainer.innerHTML = `
                     <div style="color: #ef4444;">
@@ -781,8 +996,20 @@ class SimpleDashboard:
             resultContainer.style.display = 'block';
             resultContainer.innerHTML = '<div class="loading"></div> Deleting cache value...';
 
+            // For delete operations, always use leader for consistency
+            const leaderUrl = await getLeaderUrl();
+            if (!leaderUrl) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: No leader available in cluster (deletes require leader)
+                    </div>
+                `;
+                showNotification('No leader available in cluster', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://127.0.0.1:3000/cache/' + encodeURIComponent(key), {
+                const response = await fetch(leaderUrl + '/cache/' + encodeURIComponent(key), {
                     method: 'DELETE'
                 });
                 const result = await response.json();
@@ -845,6 +1072,8 @@ class SimpleDashboard:
                         </details>
                     `;
                     showNotification(`Performance test completed: ${result.summary}`, 'success');
+                    // Update the ops/sec metric immediately
+                    await updatePerformanceMetrics();
                 } else {
                     resultContainer.innerHTML = `
                         <div style="color: #ef4444; margin-bottom: 10px;">
@@ -951,9 +1180,181 @@ class SimpleDashboard:
             }
         }
 
+        // Cache Statistics functionality
+        async function refreshCacheStats() {
+            const container = document.getElementById('cache-stats-container');
+            try {
+                const nodes = ['node1', 'node2', 'node3', 'node4', 'node5'];
+                const ports = [3000, 4000, 5000, 6000, 7000];
+                
+                let statsHtml = '<div class="stats-grid">';
+                
+                for (let i = 0; i < nodes.length; i++) {
+                    const nodeId = nodes[i];
+                    const port = ports[i];
+                    
+                    try {
+                        const response = await fetch(`http://127.0.0.1:${port}/stats`);
+                        const stats = await response.json();
+                        
+                        if (response.ok) {
+                            statsHtml += createNodeStatsCard(nodeId, port, stats, true);
+                        } else {
+                            statsHtml += createNodeStatsCard(nodeId, port, null, false);
+                        }
+                    } catch (error) {
+                        statsHtml += createNodeStatsCard(nodeId, port, null, false);
+                    }
+                }
+                
+                statsHtml += '</div>';
+                container.innerHTML = statsHtml;
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div style="color: #ef4444; text-align: center; padding: 20px;">
+                        <i class="fas fa-times-circle"></i> Error loading cache statistics: ${error.message}
+                    </div>
+                `;
+                log(`Error refreshing cache stats: ${error.message}`);
+            }
+        }
+
+        function createNodeStatsCard(nodeId, port, stats, isHealthy) {
+            if (!isHealthy || !stats) {
+                return `
+                    <div class="node-stats-card offline">
+                        <div class="node-header">
+                            <h4><i class="fas fa-server"></i> ${nodeId.toUpperCase()}</h4>
+                            <span class="status-badge offline">OFFLINE</span>
+                        </div>
+                        <div class="stats-content">
+                            <p>Port: ${port}</p>
+                            <p style="color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> Node unavailable</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const hitRate = stats.hit_rate || 0;
+            const totalOperations = (stats.hits || 0) + (stats.misses || 0);
+            const memoryUsage = ((stats.size || 0) * 0.001).toFixed(2); // Approximate memory usage
+
+            return `
+                <div class="node-stats-card">
+                    <div class="node-header">
+                        <h4><i class="fas fa-server"></i> ${nodeId.toUpperCase()}</h4>
+                        <span class="status-badge online">ONLINE</span>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stat-row">
+                            <span class="stat-label">Port:</span>
+                            <span class="stat-value">${port}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Keys:</span>
+                            <span class="stat-value">${stats.size || 0}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Max Keys:</span>
+                            <span class="stat-value">${stats.max_size || 0}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Memory (est):</span>
+                            <span class="stat-value">${memoryUsage} KB</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Hit Rate:</span>
+                            <span class="stat-value ${hitRate > 80 ? 'good' : hitRate > 50 ? 'fair' : 'poor'}">${hitRate.toFixed(1)}%</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cache Hits:</span>
+                            <span class="stat-value">${stats.hits || 0}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Cache Misses:</span>
+                            <span class="stat-value">${stats.misses || 0}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Total Ops:</span>
+                            <span class="stat-value">${totalOperations}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Sets:</span>
+                            <span class="stat-value">${stats.sets || 0}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Deletes:</span>
+                            <span class="stat-value">${stats.deletes || 0}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Evictions:</span>
+                            <span class="stat-value">${stats.evictions || 0}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${hours}h ${minutes}m ${secs}s`;
+        }
+
+        async function exportCacheStats() {
+            try {
+                const nodes = ['node1', 'node2', 'node3', 'node4', 'node5'];
+                const ports = [3000, 4000, 5000, 6000, 7000];
+                
+                let csvData = 'Node,Port,Status,Keys,Max_Keys,Hit_Rate_%,Hits,Misses,Total_Operations,Sets,Deletes,Evictions\\n';
+                
+                for (let i = 0; i < nodes.length; i++) {
+                    const nodeId = nodes[i];
+                    const port = ports[i];
+                    
+                    try {
+                        const response = await fetch(`http://127.0.0.1:${port}/stats`);
+                        const stats = await response.json();
+                        
+                        if (response.ok) {
+                            const hitRate = stats.hit_rate || 0;
+                            const totalOperations = (stats.hits || 0) + (stats.misses || 0);
+                            
+                            csvData += `${nodeId},${port},ONLINE,${stats.size || 0},${stats.max_size || 0},${hitRate.toFixed(1)},${stats.hits || 0},${stats.misses || 0},${totalOperations},${stats.sets || 0},${stats.deletes || 0},${stats.evictions || 0}\\n`;
+                        } else {
+                            csvData += `${nodeId},${port},OFFLINE,0,0,0,0,0,0,0,0,0\\n`;
+                        }
+                    } catch (error) {
+                        csvData += `${nodeId},${port},ERROR,0,0,0,0,0,0,0,0,0\\n`;
+                    }
+                }
+                
+                const blob = new Blob([csvData], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `cache-stats-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                log('Cache statistics exported to CSV');
+                
+            } catch (error) {
+                log(`Error exporting cache stats: ${error.message}`);
+                showNotification('Error exporting cache statistics', 'error');
+            }
+        }
+
         // Auto-refresh every 5 seconds
-        setInterval(refreshStatus, 5000);
+        setInterval(() => {
+            refreshStatus();
+            refreshCacheStats();
+        }, 5000);
         refreshStatus();
+        refreshCacheStats();
     </script>
 </body>
 </html>
@@ -966,27 +1367,39 @@ class SimpleDashboard:
             self.session = ClientSession()
         
         nodes = {}
-        ports = [3000, 4000, 5000]
-        node_names = ['node1', 'node2', 'node3']
         
-        for i, (name, port) in enumerate(zip(node_names, ports)):
+        for node_name, node_config in NODES.items():
+            host = node_config['host']
+            port = node_config['port']
             try:
-                async with self.session.get(f'http://127.0.0.1:{port}/status', timeout=ClientTimeout(total=2)) as resp:
+                async with self.session.get(f'http://{host}:{port}/status', timeout=ClientTimeout(total=2)) as resp:
                     if resp.status == 200:
                         data = await resp.json()
-                        nodes[name] = {
-                            'host': '127.0.0.1',
+                        nodes[node_name] = {
+                            'host': host,
                             'port': port,
                             'healthy': True,
                             'raft': data.get('raft', {}),
                             'cache': data.get('cache', {})
                         }
                     else:
-                        nodes[name] = {'host': '127.0.0.1', 'port': port, 'healthy': False}
+                        nodes[node_name] = {'host': host, 'port': port, 'healthy': False}
             except:
-                nodes[name] = {'host': '127.0.0.1', 'port': port, 'healthy': False}
+                nodes[node_name] = {'host': host, 'port': port, 'healthy': False}
         
         return web.json_response({'nodes': nodes})
+
+    async def get_performance(self, request):
+        """Get latest performance test results."""
+        return web.json_response(self.latest_performance)
+
+    async def get_leader(self, request):
+        """Get current leader information."""
+        leader_url = await self._find_leader()
+        if leader_url:
+            return web.json_response({'leader_url': leader_url, 'available': True})
+        else:
+            return web.json_response({'leader_url': None, 'available': False})
 
     async def run_test(self, request):
         """Run various tests."""
@@ -1002,10 +1415,41 @@ class SimpleDashboard:
         
         return web.json_response({'error': 'Unknown test type'})
 
+    async def _find_leader(self):
+        """Find the current leader node and return its URL."""
+        if not self.session:
+            self.session = ClientSession()
+        
+        for node_name, node_config in NODES.items():
+            host = node_config['host']
+            port = node_config['port']
+            try:
+                async with self.session.get(f'http://{host}:{port}/status', timeout=ClientTimeout(total=1)) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        raft_info = data.get('raft', {})
+                        if raft_info.get('is_leader', False):
+                            return f'http://{host}:{port}'
+            except:
+                continue
+        return None
+
     async def _performance_test(self, ops):
         """Run performance test."""
         if not self.session:
             self.session = ClientSession()
+        
+        # Find the current leader
+        leader_url = await self._find_leader()
+        if not leader_url:
+            return web.json_response({
+                'test_type': 'performance',
+                'error': 'No leader found in cluster',
+                'operations': ops,
+                'successful': 0,
+                'failed': ops,
+                'summary': 'Test failed: No leader available'
+            })
             
         start_time = time.time()
         successful = 0
@@ -1017,7 +1461,7 @@ class SimpleDashboard:
             op_start = time.time()
             try:
                 async with self.session.post(
-                    f'http://127.0.0.1:3000/cache/perf_test_{i}',
+                    f'{leader_url}/cache/perf_test_{i}',
                     json={'value': f'test_value_{i}'},
                     timeout=ClientTimeout(total=2)
                 ) as resp:
@@ -1036,6 +1480,15 @@ class SimpleDashboard:
         ops_per_sec = successful / duration if duration > 0 else 0
         avg_latency = sum(latencies) / len(latencies) if latencies else 0
         
+        # Store latest performance results
+        self.latest_performance = {
+            'ops_per_second': round(ops_per_sec, 2),
+            'avg_latency_ms': round(avg_latency, 2),
+            'last_test_time': time.time(),
+            'successful_ops': successful,
+            'total_ops': ops
+        }
+        
         return web.json_response({
             'test_type': 'performance',
             'operations': ops,
@@ -1044,6 +1497,7 @@ class SimpleDashboard:
             'duration_seconds': round(duration, 2),
             'ops_per_second': round(ops_per_sec, 2),
             'avg_latency_ms': round(avg_latency, 2),
+            'leader_used': leader_url,
             'summary': f'{successful}/{ops} ops succeeded, {round(ops_per_sec, 1)} ops/sec, {round(avg_latency, 1)}ms avg'
         })
 

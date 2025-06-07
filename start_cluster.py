@@ -1,4 +1,4 @@
-"""Script to start all three nodes of the distributed cache cluster."""
+"""Script to start all nodes of the distributed cache cluster."""
 
 import asyncio
 import subprocess
