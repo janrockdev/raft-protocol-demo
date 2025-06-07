@@ -360,7 +360,8 @@ class CacheHTTPServer:
         runner = web.AppRunner(self.app)
         await runner.setup()
         
-        site = web.TCPSite(runner, self.raft_node.host, self.raft_node.port)
+        # Bind to all interfaces to ensure accessibility
+        site = web.TCPSite(runner, "0.0.0.0", self.raft_node.port)
         await site.start()
         
-        self.logger.info(f"HTTP server started on {self.raft_node.host}:{self.raft_node.port}")
+        self.logger.info(f"HTTP server started on 0.0.0.0:{self.raft_node.port} (accessible via {self.raft_node.host}:{self.raft_node.port})")
