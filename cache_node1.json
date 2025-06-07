@@ -1,21 +1,21 @@
 {
   "cache": {
-    "user123": {
-      "key": "user123",
-      "value": "John Doe",
-      "created_at": 1749290470.0621693,
-      "accessed_at": 1749290474.521181,
-      "access_count": 1,
-      "ttl": 300,
-      "expires_at": 1749290770.0621693
+    "test_key": {
+      "key": "test_key",
+      "value": "test_value",
+      "created_at": 1749291301.5029163,
+      "accessed_at": 1749291301.5029163,
+      "access_count": 0,
+      "ttl": null,
+      "expires_at": null
     }
   },
   "stats": {
     "hits": 1,
     "misses": 0,
-    "sets": 1,
+    "sets": 2,
     "deletes": 0,
     "evictions": 0
   },
-  "timestamp": 1749290588.7624953
+  "timestamp": 1749291312.9170654
 }
