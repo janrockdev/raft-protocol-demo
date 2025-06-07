@@ -357,20 +357,11 @@ class CacheHTTPServer:
     
     async def start(self):
         """Start the HTTP server."""
-        try:
-            runner = web.AppRunner(self.app)
-            await runner.setup()
-            
-            # Create site with proper configuration - bind to all interfaces
-            site = web.TCPSite(runner, "0.0.0.0", self.raft_node.port, reuse_address=True, reuse_port=True)
-            await site.start()
-            
-            self.logger.info(f"HTTP server started on 127.0.0.1:{self.raft_node.port}")
-            
-            # Store references for cleanup
-            self.site = site
-            self.runner = runner
-            
-        except Exception as e:
-            self.logger.error(f"Failed to start HTTP server on port {self.raft_node.port}: {e}")
-            raise
+        runner = web.AppRunner(self.app)
+        await runner.setup()
+        
+        # Bind to all interfaces to ensure accessibility
+        site = web.TCPSite(runner, "0.0.0.0", self.raft_node.port)
+        await site.start()
+        
+        self.logger.info(f"HTTP server started on 0.0.0.0:{self.raft_node.port} (accessible via {self.raft_node.host}:{self.raft_node.port})")
