@@ -22,7 +22,7 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "pip install aiohttp aiohttp-cors && python start_cluster.py"
-waitForPort = 5000
+waitForPort = 3000
 
 [deployment]
 run = ["sh", "-c", "pip install aiohttp aiohttp-cors && python start_cluster.py"]
