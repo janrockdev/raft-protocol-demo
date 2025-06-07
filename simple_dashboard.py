@@ -732,16 +732,40 @@ class SimpleDashboard:
         async function getCache() {
             const key = document.getElementById('cache-key').value;
             if (!key) {
-                alert('Please provide a key');
+                showNotification('Please provide a key', 'error');
                 return;
             }
+
+            const resultContainer = document.getElementById('cache-result');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = '<div class="loading"></div> Getting cache value...';
 
             try {
                 const response = await fetch('http://127.0.0.1:3000/cache/' + encodeURIComponent(key));
                 const result = await response.json();
-                document.getElementById('cache-result').innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+                
+                if (response.ok && result.success) {
+                    resultContainer.innerHTML = `
+                        <div style="color: #10b981; margin-bottom: 10px;">
+                            <i class="fas fa-check-circle"></i> Cache retrieved successfully
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                } else {
+                    resultContainer.innerHTML = `
+                        <div style="color: #f59e0b; margin-bottom: 10px;">
+                            <i class="fas fa-info-circle"></i> Key not found or expired
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
                 log(`Retrieved cache key: ${key}`);
             } catch (error) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: ${error.message}
+                    </div>
+                `;
                 log(`Error getting cache: ${error.message}`);
             }
         }
@@ -749,18 +773,43 @@ class SimpleDashboard:
         async function deleteCache() {
             const key = document.getElementById('cache-key').value;
             if (!key) {
-                alert('Please provide a key');
+                showNotification('Please provide a key', 'error');
                 return;
             }
+
+            const resultContainer = document.getElementById('cache-result');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = '<div class="loading"></div> Deleting cache value...';
 
             try {
                 const response = await fetch('http://127.0.0.1:3000/cache/' + encodeURIComponent(key), {
                     method: 'DELETE'
                 });
                 const result = await response.json();
-                document.getElementById('cache-result').innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+                
+                if (response.ok && result.success) {
+                    resultContainer.innerHTML = `
+                        <div style="color: #10b981; margin-bottom: 10px;">
+                            <i class="fas fa-check-circle"></i> Cache deleted successfully
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                    showNotification(`Cache key "${key}" deleted successfully`, 'success');
+                } else {
+                    resultContainer.innerHTML = `
+                        <div style="color: #f59e0b; margin-bottom: 10px;">
+                            <i class="fas fa-info-circle"></i> Key not found
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
                 log(`Deleted cache key: ${key}`);
             } catch (error) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: ${error.message}
+                    </div>
+                `;
                 log(`Error deleting cache: ${error.message}`);
             }
         }
@@ -769,6 +818,10 @@ class SimpleDashboard:
             const ops = parseInt(document.getElementById('test-ops').value) || 50;
             log(`Starting performance test with ${ops} operations`);
 
+            const resultContainer = document.getElementById('perf-result');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = '<div class="loading"></div> Running performance test...';
+
             try {
                 const response = await fetch('/api/test', {
                     method: 'POST',
@@ -776,9 +829,37 @@ class SimpleDashboard:
                     body: JSON.stringify({type: 'performance', operations: ops})
                 });
                 const result = await response.json();
-                document.getElementById('perf-result').innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
-                log(`Performance test completed: ${result.summary}`);
+                
+                if (response.ok) {
+                    resultContainer.innerHTML = `
+                        <div style="color: #10b981; margin-bottom: 15px;">
+                            <i class="fas fa-check-circle"></i> Performance test completed successfully
+                        </div>
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #10b981;">
+                            <h4 style="margin: 0 0 10px 0; color: #065f46;">Test Summary</h4>
+                            <p style="margin: 0; font-weight: 500; color: #059669;">${result.summary}</p>
+                        </div>
+                        <details style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+                            <summary style="cursor: pointer; font-weight: 500; color: #334155;">Detailed Results</summary>
+                            <pre style="margin-top: 10px; overflow-x: auto;">${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+                    showNotification(`Performance test completed: ${result.summary}`, 'success');
+                } else {
+                    resultContainer.innerHTML = `
+                        <div style="color: #ef4444; margin-bottom: 10px;">
+                            <i class="fas fa-exclamation-circle"></i> Performance test failed
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+                log(`Performance test completed: ${result.summary || 'Check results above'}`);
             } catch (error) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: ${error.message}
+                    </div>
+                `;
                 log(`Performance test failed: ${error.message}`);
             }
         }
@@ -787,6 +868,10 @@ class SimpleDashboard:
             const node = document.getElementById('target-node').value;
             if (!confirm(`Kill ${node}?`)) return;
 
+            const resultContainer = document.getElementById('sim-result');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = '<div class="loading"></div> Killing node...';
+
             try {
                 const response = await fetch('/api/test', {
                     method: 'POST',
@@ -794,10 +879,31 @@ class SimpleDashboard:
                     body: JSON.stringify({type: 'kill_node', node: node})
                 });
                 const result = await response.json();
-                document.getElementById('sim-result').innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+                
+                if (response.ok) {
+                    resultContainer.innerHTML = `
+                        <div style="color: #ef4444; margin-bottom: 10px;">
+                            <i class="fas fa-skull"></i> Node ${node} killed successfully
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                    showNotification(`Node ${node} killed successfully`, 'success');
+                } else {
+                    resultContainer.innerHTML = `
+                        <div style="color: #f59e0b; margin-bottom: 10px;">
+                            <i class="fas fa-exclamation-circle"></i> Failed to kill node
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
                 log(`Killed node: ${node}`);
                 setTimeout(refreshStatus, 2000);
             } catch (error) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: ${error.message}
+                    </div>
+                `;
                 log(`Error killing node: ${error.message}`);
             }
         }
@@ -805,6 +911,10 @@ class SimpleDashboard:
         async function restartNode() {
             const node = document.getElementById('target-node').value;
             
+            const resultContainer = document.getElementById('sim-result');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = '<div class="loading"></div> Restarting node...';
+
             try {
                 const response = await fetch('/api/test', {
                     method: 'POST',
@@ -812,10 +922,31 @@ class SimpleDashboard:
                     body: JSON.stringify({type: 'restart_node', node: node})
                 });
                 const result = await response.json();
-                document.getElementById('sim-result').innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+                
+                if (response.ok) {
+                    resultContainer.innerHTML = `
+                        <div style="color: #10b981; margin-bottom: 10px;">
+                            <i class="fas fa-play"></i> Node ${node} restarted successfully
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                    showNotification(`Node ${node} restarted successfully`, 'success');
+                } else {
+                    resultContainer.innerHTML = `
+                        <div style="color: #f59e0b; margin-bottom: 10px;">
+                            <i class="fas fa-exclamation-circle"></i> Failed to restart node
+                        </div>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
                 log(`Restarted node: ${node}`);
                 setTimeout(refreshStatus, 3000);
             } catch (error) {
+                resultContainer.innerHTML = `
+                    <div style="color: #ef4444;">
+                        <i class="fas fa-times-circle"></i> Error: ${error.message}
+                    </div>
+                `;
                 log(`Error restarting node: ${error.message}`);
             }
         }
