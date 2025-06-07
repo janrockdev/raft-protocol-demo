@@ -80,8 +80,21 @@ class DistributedCacheNode:
             
             self.logger.info(f"Node {self.node_id} is running")
             
-            # Give servers time to fully start
-            await asyncio.sleep(1)
+            # Give servers time to fully start and verify binding
+            await asyncio.sleep(2)
+            
+            # Verify HTTP server is accessible
+            try:
+                import aiohttp
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(f'http://127.0.0.1:{self.raft_node.port}/health', 
+                                         timeout=aiohttp.ClientTimeout(total=2)) as resp:
+                        if resp.status == 200:
+                            self.logger.info(f"HTTP server verified accessible on port {self.raft_node.port}")
+                        else:
+                            self.logger.warning(f"HTTP server responding with status {resp.status}")
+            except Exception as e:
+                self.logger.error(f"HTTP server accessibility check failed: {e}")
             
             # Wait for shutdown signal
             await self.shutdown_event.wait()

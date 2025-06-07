@@ -38,8 +38,8 @@ class ClusterManager:
                 self.processes.append(process)
                 print(f"Started node {node_id} (PID: {process.pid})")
                 
-                # Give each node more time to fully initialize HTTP servers
-                time.sleep(2)
+                # Give each node time to fully initialize HTTP servers
+                time.sleep(0.5)
                 
             except Exception as e:
                 print(f"Failed to start node {node_id}: {e}")
