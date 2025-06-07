@@ -361,8 +361,8 @@ class CacheHTTPServer:
             runner = web.AppRunner(self.app)
             await runner.setup()
             
-            # Create site with proper configuration
-            site = web.TCPSite(runner, "127.0.0.1", self.raft_node.port)
+            # Create site with proper configuration - bind to all interfaces
+            site = web.TCPSite(runner, "0.0.0.0", self.raft_node.port, reuse_address=True, reuse_port=True)
             await site.start()
             
             self.logger.info(f"HTTP server started on 127.0.0.1:{self.raft_node.port}")

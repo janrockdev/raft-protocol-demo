@@ -43,27 +43,22 @@ run = ["sh", "-c", "python start_cluster.py"]
 [[ports]]
 localPort = 3000
 externalPort = 80
-exposeLocalhost = true
 
 [[ports]]
 localPort = 4000
 externalPort = 3000
-exposeLocalhost = true
 
 [[ports]]
 localPort = 5000
 externalPort = 5000
-exposeLocalhost = true
 
 [[ports]]
 localPort = 6000
 externalPort = 6000
-exposeLocalhost = true
 
 [[ports]]
 localPort = 7000
 externalPort = 3001
-exposeLocalhost = true
 
 [[ports]]
 localPort = 8080
