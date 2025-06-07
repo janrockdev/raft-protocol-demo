@@ -17,7 +17,9 @@ class BrainSplitDemo:
         self.nodes = {
             'node1': 3000,
             'node2': 4000,
-            'node3': 5000
+            'node3': 5000,
+            'node4': 6000,
+            'node5': 7000
         }
         self.session = None
         
@@ -57,7 +59,7 @@ class BrainSplitDemo:
         followers = [n for n, s in state.items() if s.get('state') == 'follower']
         candidates = [n for n, s in state.items() if s.get('state') == 'candidate']
         
-        has_majority = len(healthy) >= 2  # For 3 nodes, need 2
+        has_majority = len(healthy) >= 3  # For 5 nodes, need 3
         
         return {
             'healthy_count': len(healthy),
