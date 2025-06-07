@@ -2,7 +2,7 @@
 Simple web dashboard for monitoring and testing the distributed cache cluster.
 """
 
-from aiohttp import web, ClientSession
+from aiohttp import web, ClientSession, ClientTimeout
 import asyncio
 import json
 import subprocess
@@ -266,7 +266,7 @@ class SimpleDashboard:
         
         for i, (name, port) in enumerate(zip(node_names, ports)):
             try:
-                async with self.session.get(f'http://127.0.0.1:{port}/status', timeout=2) as resp:
+                async with self.session.get(f'http://127.0.0.1:{port}/status', timeout=ClientTimeout(total=2)) as resp:
                     if resp.status == 200:
                         data = await resp.json()
                         nodes[name] = {
@@ -305,24 +305,31 @@ class SimpleDashboard:
         start_time = time.time()
         successful = 0
         failed = 0
+        latencies = []
         
-        # Test SET operations
+        # Test SET operations with better error handling
         for i in range(ops):
+            op_start = time.time()
             try:
                 async with self.session.post(
                     f'http://127.0.0.1:3000/cache/perf_test_{i}',
                     json={'value': f'test_value_{i}'},
-                    timeout=5
+                    timeout=ClientTimeout(total=2)
                 ) as resp:
+                    op_time = time.time() - op_start
                     if resp.status == 200:
                         successful += 1
+                        latencies.append(op_time * 1000)  # Convert to ms
                     else:
                         failed += 1
-            except:
+            except asyncio.TimeoutError:
+                failed += 1
+            except Exception as e:
                 failed += 1
         
         duration = time.time() - start_time
         ops_per_sec = successful / duration if duration > 0 else 0
+        avg_latency = sum(latencies) / len(latencies) if latencies else 0
         
         return web.json_response({
             'test_type': 'performance',
@@ -331,7 +338,8 @@ class SimpleDashboard:
             'failed': failed,
             'duration_seconds': round(duration, 2),
             'ops_per_second': round(ops_per_sec, 2),
-            'summary': f'{successful}/{ops} ops succeeded, {round(ops_per_sec, 1)} ops/sec'
+            'avg_latency_ms': round(avg_latency, 2),
+            'summary': f'{successful}/{ops} ops succeeded, {round(ops_per_sec, 1)} ops/sec, {round(avg_latency, 1)}ms avg'
         })
 
     async def _kill_node(self, node):
