@@ -276,31 +276,29 @@ class SimpleDashboard:
         }
         
         .log {
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 16px;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            height: 350px;
+            background: #f8fafc;
+            color: #334155;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            height: 300px;
             overflow-y: auto;
-            box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
-            border: 1px solid #334155;
+            border: 1px solid #e2e8f0;
         }
         
         .log::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         
         .log::-webkit-scrollbar-track {
-            background: #334155;
-            border-radius: 4px;
+            background: #f1f5f9;
         }
         
         .log::-webkit-scrollbar-thumb {
-            background: #64748b;
-            border-radius: 4px;
+            background: #cbd5e1;
+            border-radius: 3px;
         }
         
         .form-group {
