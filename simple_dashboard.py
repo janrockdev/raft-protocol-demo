@@ -36,9 +36,9 @@ class SimpleDashboard:
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
             min-height: 100vh;
-            color: #333;
+            color: #334155;
             line-height: 1.6;
         }
         
@@ -49,28 +49,24 @@ class SimpleDashboard:
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
             margin-bottom: 30px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
         }
         
         .header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #1e293b;
             margin-bottom: 10px;
         }
         
         .header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #64748b;
             font-weight: 400;
         }
@@ -83,28 +79,23 @@ class SimpleDashboard:
         }
         
         .metric-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: box-shadow 0.2s ease;
         }
         
         .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .metric-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #475569;
         }
         
         .metric-value {
@@ -131,100 +122,101 @@ class SimpleDashboard:
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: box-shadow 0.2s ease;
         }
         
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .card h3 {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .card h3 i {
-            color: #667eea;
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-            margin: 5px;
-            display: inline-flex;
             align-items: center;
             gap: 8px;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        .card h3 i {
+            color: #475569;
+            font-size: 1rem;
         }
         
-        .btn:active {
-            transform: translateY(0);
+        .btn {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn:hover {
+            background: #1e293b;
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            background: #3b82f6;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
         }
         
         .btn-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            background: #10b981;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
         }
         
         .btn-danger {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+            background: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
         }
         
         .node-status {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px 20px;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-radius: 16px;
-            margin: 10px 0;
-            border-left: 5px solid #667eea;
-            transition: all 0.3s ease;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid #cbd5e1;
+            transition: box-shadow 0.2s ease;
         }
         
         .node-status:hover {
-            transform: translateX(5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .node-status.healthy {
             border-left-color: #10b981;
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            background: #f0fdf4;
         }
         
         .node-status.unhealthy {
             border-left-color: #ef4444;
-            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            background: #fef2f2;
         }
         
         .node-name {
