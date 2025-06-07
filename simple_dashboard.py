@@ -1039,18 +1039,30 @@ class SimpleDashboard:
                 async with self.session.post(
                     f'http://127.0.0.1:3000/cache/perf_test_{i}',
                     json={'value': f'test_value_{i}'},
-                    timeout=ClientTimeout(total=2)
+                    timeout=ClientTimeout(total=10)
                 ) as resp:
                     op_time = time.time() - op_start
-                    if resp.status == 200:
+                    if resp.status in [200, 201]:
                         successful += 1
                         latencies.append(op_time * 1000)  # Convert to ms
                     else:
                         failed += 1
+                        # Log error for debugging
+                        try:
+                            error_text = await resp.text()
+                            print(f"Operation {i} failed: HTTP {resp.status} - {error_text[:100]}")
+                        except:
+                            pass
             except asyncio.TimeoutError:
                 failed += 1
+                print(f"Operation {i} timed out")
             except Exception as e:
                 failed += 1
+                print(f"Operation {i} error: {e}")
+                
+            # Add small delay to prevent overwhelming
+            if i % 10 == 0:
+                await asyncio.sleep(0.1)
         
         duration = time.time() - start_time
         ops_per_sec = successful / duration if duration > 0 else 0
