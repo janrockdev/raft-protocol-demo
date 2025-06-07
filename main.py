@@ -80,6 +80,9 @@ class DistributedCacheNode:
             
             self.logger.info(f"Node {self.node_id} is running")
             
+            # Give servers time to fully start
+            await asyncio.sleep(1)
+            
             # Wait for shutdown signal
             await self.shutdown_event.wait()
             

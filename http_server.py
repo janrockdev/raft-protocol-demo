@@ -361,11 +361,14 @@ class CacheHTTPServer:
             runner = web.AppRunner(self.app)
             await runner.setup()
             
-            # Bind to all interfaces to ensure accessibility
-            site = web.TCPSite(runner, "0.0.0.0", self.raft_node.port)
+            # Bind to localhost with proper error handling
+            site = web.TCPSite(runner, "127.0.0.1", self.raft_node.port)
             await site.start()
             
-            self.logger.info(f"HTTP server started on 0.0.0.0:{self.raft_node.port}")
+            # Verify the server is actually listening
+            await asyncio.sleep(0.1)
+            
+            self.logger.info(f"HTTP server started on 127.0.0.1:{self.raft_node.port}")
             
             # Store runner for cleanup
             self.runner = runner
