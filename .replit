@@ -1,0 +1,28 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Distributed Cache Cluster"
+
+[[workflows.workflow]]
+name = "Distributed Cache Cluster"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pip install aiohttp aiohttp-cors && python start_cluster.py"
+waitForPort = 5000
+
+[deployment]
+run = ["sh", "-c", "pip install aiohttp aiohttp-cors && python start_cluster.py"]
