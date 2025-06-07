@@ -19,6 +19,10 @@ args = "Distributed Cache Cluster"
 task = "workflow.run"
 args = "Cache Dashboard"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Fixed Cache Cluster"
+
 [[workflows.workflow]]
 name = "Distributed Cache Cluster"
 author = "agent"
@@ -36,6 +40,70 @@ author = "agent"
 task = "shell.exec"
 args = "python simple_dashboard.py"
 waitForPort = 8080
+
+[[workflows.workflow]]
+name = "Fixed Cache Cluster"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = '''
+python -c "
+import asyncio
+import subprocess
+import sys
+import time
+import signal
+from config import NODES
+
+class SimpleClusterManager:
+    def __init__(self):
+        self.processes = []
+        
+    def start_cluster(self):
+        print('Starting 5-node cluster with fixed HTTP binding...')
+        
+        for node_id in NODES.keys():
+            try:
+                cmd = [sys.executable, 'main.py', node_id]
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+                self.processes.append(process)
+                print(f'Started {node_id} (PID: {process.pid})')
+                time.sleep(3)  # Longer delay for proper HTTP binding
+            except Exception as e:
+                print(f'Failed to start {node_id}: {e}')
+                return False
+                
+        print(f'All {len(self.processes)} nodes started successfully!')
+        return True
+        
+    def cleanup(self):
+        for process in self.processes:
+            try:
+                process.terminate()
+                process.wait(timeout=3)
+            except:
+                process.kill()
+                
+    def signal_handler(self, signum, frame):
+        self.cleanup()
+        sys.exit(0)
+
+manager = SimpleClusterManager()
+signal.signal(signal.SIGINT, manager.signal_handler)
+signal.signal(signal.SIGTERM, manager.signal_handler)
+
+try:
+    if manager.start_cluster():
+        print('\nCluster running. Press Ctrl+C to stop.')
+        while True:
+            time.sleep(1)
+except KeyboardInterrupt:
+    print('\nShutting down cluster...')
+finally:
+    manager.cleanup()
+"'''
+waitForPort = 3000
 
 [deployment]
 run = ["sh", "-c", "python start_cluster.py"]
