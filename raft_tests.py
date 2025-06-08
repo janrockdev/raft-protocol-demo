@@ -34,9 +34,9 @@ class RaftTester:
     
     def __init__(self):
         self.nodes = {
-            'node1': {'host': '127.0.0.1', 'port': 3000},
-            'node2': {'host': '127.0.0.1', 'port': 4000},
-            'node3': {'host': '127.0.0.1', 'port': 5000}
+            'node1': {'host': '127.0.0.1', 'port': 3001},
+            'node2': {'host': '127.0.0.1', 'port': 3002},
+            'node3': {'host': '127.0.0.1', 'port': 3003}
         }
         self.session = None
         self.test_results = []

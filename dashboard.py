@@ -23,9 +23,9 @@ class CacheDashboard:
         self.app = web.Application()
         self.session: Optional[ClientSession] = None
         self.nodes = {
-            'node1': {'host': '127.0.0.1', 'port': 3000, 'status': 'unknown'},
-            'node2': {'host': '127.0.0.1', 'port': 4000, 'status': 'unknown'},
-            'node3': {'host': '127.0.0.1', 'port': 5000, 'status': 'unknown'}
+            'node1': {'host': '127.0.0.1', 'port': 3001, 'status': 'unknown'},
+            'node2': {'host': '127.0.0.1', 'port': 3002, 'status': 'unknown'},
+            'node3': {'host': '127.0.0.1', 'port': 3003, 'status': 'unknown'}
         }
         self.cluster_stats = {}
         self.test_results = []
@@ -230,9 +230,9 @@ class CacheDashboard:
                         <div class="input-group">
                             <label>Target Node:</label>
                             <select id="targetNode">
-                                <option value="node1">Node 1 (Port 3000)</option>
-                                <option value="node2">Node 2 (Port 4000)</option>
-                                <option value="node3">Node 3 (Port 5000)</option>
+                                <option value="node1">Node 1 (Port 3001)</option>
+                                <option value="node2">Node 2 (Port 3002)</option>
+                                <option value="node3">Node 3 (Port 3003)</option>
                             </select>
                         </div>
                         <button class="btn btn-danger" onclick="simulateNodeFailure()">Simulate Node Failure</button>
@@ -305,8 +305,9 @@ class CacheDashboard:
                 function logActivity(message, type = 'info') {
                     const log = document.getElementById('activityLog');
                     const timestamp = new Date().toLocaleTimeString();
-                    const entry = `[${timestamp}] ${message}\\n`;
-                    log.textContent += entry;
+                    const entry = `[${timestamp}] ${message}`;
+                    const newline = `ln \n`;
+                    log.textContent += newline + entry;
                     log.scrollTop = log.scrollHeight;
                 }
 
@@ -661,7 +662,7 @@ class CacheDashboard:
         """Get aggregated cluster statistics."""
         try:
             # Get stats from the leader node (typically node1)
-            url = "http://127.0.0.1:3000/stats"
+            url = "http://127.0.0.1:3001/stats"
             async with self.session.get(url) as response:
                 if response.status == 200:
                     stats = await response.json()
@@ -688,7 +689,7 @@ class CacheDashboard:
                 payload['ttl'] = ttl
             
             # Send to leader node
-            url = f"http://127.0.0.1:3000/cache/{key}"
+            url = f"http://127.0.0.1:3001/cache/{key}"
             async with self.session.post(url, json=payload) as response:
                 result = await response.json()
                 return web.json_response(result, status=response.status)
@@ -724,7 +725,7 @@ class CacheDashboard:
         try:
             key = request.match_info['key']
             
-            url = f"http://127.0.0.1:3000/cache/{key}"
+            url = f"http://127.0.0.1:3001/cache/{key}"
             async with self.session.delete(url) as response:
                 result = await response.json()
                 return web.json_response(result, status=response.status)
@@ -736,7 +737,7 @@ class CacheDashboard:
     async def list_cache_keys(self, request):
         """List all cache keys."""
         try:
-            url = "http://127.0.0.1:3000/cache"
+            url = "http://127.0.0.1:3001/cache"
             async with self.session.get(url) as response:
                 result = await response.json()
                 return web.json_response(result, status=response.status)
@@ -748,7 +749,7 @@ class CacheDashboard:
     async def clear_cache(self, request):
         """Clear all cache data."""
         try:
-            url = "http://127.0.0.1:3000/cache"
+            url = "http://127.0.0.1:3001/cache"
             async with self.session.delete(url) as response:
                 result = await response.json()
                 return web.json_response(result, status=response.status)
@@ -766,7 +767,7 @@ class CacheDashboard:
             # Test multiple set operations
             for i in range(10):
                 try:
-                    url = f"http://127.0.0.1:3000/cache/raft_test_{i}"
+                    url = f"http://127.0.0.1:3001/cache/raft_test_{i}"
                     payload = {'value': f'consensus_test_value_{i}'}
                     async with self.session.post(url, json=payload) as response:
                         result = await response.json()
@@ -812,7 +813,7 @@ class CacheDashboard:
                 for i in range(operations if test_type == 'set' else operations // 2):
                     op_start = time.time()
                     try:
-                        url = f"http://127.0.0.1:3000/cache/perf_test_{i}"
+                        url = f"http://127.0.0.1:3001/cache/perf_test_{i}"
                         payload = {'value': f'performance_test_value_{i}'}
                         async with self.session.post(url, json=payload) as response:
                             await response.json()
@@ -834,7 +835,7 @@ class CacheDashboard:
                 for i in range(operations if test_type == 'get' else operations // 2):
                     op_start = time.time()
                     try:
-                        url = f"http://127.0.0.1:3000/cache/perf_test_{i}"
+                        url = f"http://127.0.0.1:3001/cache/perf_test_{i}"
                         async with self.session.get(url) as response:
                             await response.json()
                             results.append({

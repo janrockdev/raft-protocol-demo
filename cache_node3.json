@@ -1,19 +1,10 @@
 {
   "cache": {
-    "test_key": {
-      "key": "test_key",
-      "value": "test_value",
-      "created_at": 1749291301.5400565,
-      "accessed_at": 1749291301.5400565,
-      "access_count": 0,
-      "ttl": null,
-      "expires_at": null
-    },
     "perf_test_0": {
       "key": "perf_test_0",
       "value": "test_value_0",
-      "created_at": 1749306232.7825253,
-      "accessed_at": 1749306232.7825253,
+      "created_at": 1749375758.4464061,
+      "accessed_at": 1749375758.4464061,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -21,8 +12,8 @@
     "perf_test_1": {
       "key": "perf_test_1",
       "value": "test_value_1",
-      "created_at": 1749306232.7845328,
-      "accessed_at": 1749306232.7845328,
+      "created_at": 1749375758.4501455,
+      "accessed_at": 1749375758.4501455,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -30,8 +21,8 @@
     "perf_test_2": {
       "key": "perf_test_2",
       "value": "test_value_2",
-      "created_at": 1749306232.7875602,
-      "accessed_at": 1749306232.7875602,
+      "created_at": 1749375758.4534247,
+      "accessed_at": 1749375758.4534247,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -39,8 +30,8 @@
     "perf_test_3": {
       "key": "perf_test_3",
       "value": "test_value_3",
-      "created_at": 1749306232.7939055,
-      "accessed_at": 1749306232.7939055,
+      "created_at": 1749375758.4588563,
+      "accessed_at": 1749375758.4588563,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -48,8 +39,8 @@
     "perf_test_4": {
       "key": "perf_test_4",
       "value": "test_value_4",
-      "created_at": 1749306232.798046,
-      "accessed_at": 1749306232.798046,
+      "created_at": 1749375758.4719877,
+      "accessed_at": 1749375758.4719877,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -57,8 +48,8 @@
     "perf_test_5": {
       "key": "perf_test_5",
       "value": "test_value_5",
-      "created_at": 1749306232.8015747,
-      "accessed_at": 1749306232.8015747,
+      "created_at": 1749375758.479704,
+      "accessed_at": 1749375758.479704,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -66,8 +57,8 @@
     "perf_test_6": {
       "key": "perf_test_6",
       "value": "test_value_6",
-      "created_at": 1749306232.8057165,
-      "accessed_at": 1749306232.8057165,
+      "created_at": 1749375758.4831975,
+      "accessed_at": 1749375758.4831975,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -75,8 +66,8 @@
     "perf_test_7": {
       "key": "perf_test_7",
       "value": "test_value_7",
-      "created_at": 1749306232.810111,
-      "accessed_at": 1749306232.810111,
+      "created_at": 1749375758.4878747,
+      "accessed_at": 1749375758.4878747,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -84,8 +75,8 @@
     "perf_test_8": {
       "key": "perf_test_8",
       "value": "test_value_8",
-      "created_at": 1749306232.8146915,
-      "accessed_at": 1749306232.8146915,
+      "created_at": 1749375758.4923897,
+      "accessed_at": 1749375758.4923897,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -93,8 +84,8 @@
     "perf_test_9": {
       "key": "perf_test_9",
       "value": "test_value_9",
-      "created_at": 1749306232.8181403,
-      "accessed_at": 1749306232.8181403,
+      "created_at": 1749375758.501353,
+      "accessed_at": 1749375758.501353,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -102,8 +93,8 @@
     "perf_test_10": {
       "key": "perf_test_10",
       "value": "test_value_10",
-      "created_at": 1749306232.8215513,
-      "accessed_at": 1749306232.8215513,
+      "created_at": 1749375758.5079799,
+      "accessed_at": 1749375758.5079799,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -111,8 +102,8 @@
     "perf_test_11": {
       "key": "perf_test_11",
       "value": "test_value_11",
-      "created_at": 1749306232.8255804,
-      "accessed_at": 1749306232.8255804,
+      "created_at": 1749375758.5164638,
+      "accessed_at": 1749375758.5164638,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -120,8 +111,8 @@
     "perf_test_12": {
       "key": "perf_test_12",
       "value": "test_value_12",
-      "created_at": 1749306232.8305094,
-      "accessed_at": 1749306232.8305094,
+      "created_at": 1749375758.5223029,
+      "accessed_at": 1749375758.5223029,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -129,8 +120,8 @@
     "perf_test_13": {
       "key": "perf_test_13",
       "value": "test_value_13",
-      "created_at": 1749306232.8404303,
-      "accessed_at": 1749306232.8404303,
+      "created_at": 1749375758.5263581,
+      "accessed_at": 1749375758.5263581,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -138,8 +129,8 @@
     "perf_test_14": {
       "key": "perf_test_14",
       "value": "test_value_14",
-      "created_at": 1749306232.8448439,
-      "accessed_at": 1749306232.8448439,
+      "created_at": 1749375758.5319808,
+      "accessed_at": 1749375758.5319808,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -147,8 +138,8 @@
     "perf_test_15": {
       "key": "perf_test_15",
       "value": "test_value_15",
-      "created_at": 1749306232.8493838,
-      "accessed_at": 1749306232.8493838,
+      "created_at": 1749375758.5377247,
+      "accessed_at": 1749375758.5377247,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -156,8 +147,8 @@
     "perf_test_16": {
       "key": "perf_test_16",
       "value": "test_value_16",
-      "created_at": 1749306232.8561742,
-      "accessed_at": 1749306232.8561742,
+      "created_at": 1749375758.5435448,
+      "accessed_at": 1749375758.5435448,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -165,8 +156,8 @@
     "perf_test_17": {
       "key": "perf_test_17",
       "value": "test_value_17",
-      "created_at": 1749306232.8603122,
-      "accessed_at": 1749306232.8603122,
+      "created_at": 1749375758.5513453,
+      "accessed_at": 1749375758.5513453,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -174,8 +165,8 @@
     "perf_test_18": {
       "key": "perf_test_18",
       "value": "test_value_18",
-      "created_at": 1749306232.8662014,
-      "accessed_at": 1749306232.8662014,
+      "created_at": 1749375758.5566397,
+      "accessed_at": 1749375758.5566397,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -183,8 +174,8 @@
     "perf_test_19": {
       "key": "perf_test_19",
       "value": "test_value_19",
-      "created_at": 1749306232.8721528,
-      "accessed_at": 1749306232.8721528,
+      "created_at": 1749375758.5591667,
+      "accessed_at": 1749375758.5591667,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -192,8 +183,8 @@
     "perf_test_20": {
       "key": "perf_test_20",
       "value": "test_value_20",
-      "created_at": 1749306232.876206,
-      "accessed_at": 1749306232.876206,
+      "created_at": 1749375758.561672,
+      "accessed_at": 1749375758.561672,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -201,8 +192,8 @@
     "perf_test_21": {
       "key": "perf_test_21",
       "value": "test_value_21",
-      "created_at": 1749306232.8795054,
-      "accessed_at": 1749306232.8795054,
+      "created_at": 1749375758.5649064,
+      "accessed_at": 1749375758.5649064,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -210,8 +201,8 @@
     "perf_test_22": {
       "key": "perf_test_22",
       "value": "test_value_22",
-      "created_at": 1749306232.8840299,
-      "accessed_at": 1749306232.8840299,
+      "created_at": 1749375758.5671089,
+      "accessed_at": 1749375758.5671089,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -219,8 +210,8 @@
     "perf_test_23": {
       "key": "perf_test_23",
       "value": "test_value_23",
-      "created_at": 1749306232.8874867,
-      "accessed_at": 1749306232.8874867,
+      "created_at": 1749375758.5714166,
+      "accessed_at": 1749375758.5714166,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -228,8 +219,8 @@
     "perf_test_24": {
       "key": "perf_test_24",
       "value": "test_value_24",
-      "created_at": 1749306232.8918529,
-      "accessed_at": 1749306232.8918529,
+      "created_at": 1749375758.5760593,
+      "accessed_at": 1749375758.5760593,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -237,8 +228,8 @@
     "perf_test_25": {
       "key": "perf_test_25",
       "value": "test_value_25",
-      "created_at": 1749306232.8984559,
-      "accessed_at": 1749306232.8984559,
+      "created_at": 1749375758.5797212,
+      "accessed_at": 1749375758.5797212,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -246,8 +237,8 @@
     "perf_test_26": {
       "key": "perf_test_26",
       "value": "test_value_26",
-      "created_at": 1749306232.9015489,
-      "accessed_at": 1749306232.9015489,
+      "created_at": 1749375758.5822794,
+      "accessed_at": 1749375758.5822794,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -255,8 +246,8 @@
     "perf_test_27": {
       "key": "perf_test_27",
       "value": "test_value_27",
-      "created_at": 1749306232.9045842,
-      "accessed_at": 1749306232.9045842,
+      "created_at": 1749375758.5856788,
+      "accessed_at": 1749375758.5856788,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -264,8 +255,8 @@
     "perf_test_28": {
       "key": "perf_test_28",
       "value": "test_value_28",
-      "created_at": 1749306232.9091547,
-      "accessed_at": 1749306232.9091547,
+      "created_at": 1749375758.5898802,
+      "accessed_at": 1749375758.5898802,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -273,8 +264,8 @@
     "perf_test_29": {
       "key": "perf_test_29",
       "value": "test_value_29",
-      "created_at": 1749306232.9136896,
-      "accessed_at": 1749306232.9136896,
+      "created_at": 1749375758.5957675,
+      "accessed_at": 1749375758.5957675,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -282,8 +273,8 @@
     "perf_test_30": {
       "key": "perf_test_30",
       "value": "test_value_30",
-      "created_at": 1749306232.9188254,
-      "accessed_at": 1749306232.9188254,
+      "created_at": 1749375758.601288,
+      "accessed_at": 1749375758.601288,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -291,8 +282,8 @@
     "perf_test_31": {
       "key": "perf_test_31",
       "value": "test_value_31",
-      "created_at": 1749306232.9226124,
-      "accessed_at": 1749306232.9226124,
+      "created_at": 1749375758.6069615,
+      "accessed_at": 1749375758.6069615,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -300,8 +291,8 @@
     "perf_test_32": {
       "key": "perf_test_32",
       "value": "test_value_32",
-      "created_at": 1749306232.9264727,
-      "accessed_at": 1749306232.9264727,
+      "created_at": 1749375758.612772,
+      "accessed_at": 1749375758.612772,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -309,8 +300,8 @@
     "perf_test_33": {
       "key": "perf_test_33",
       "value": "test_value_33",
-      "created_at": 1749306232.9324834,
-      "accessed_at": 1749306232.9324834,
+      "created_at": 1749375758.614986,
+      "accessed_at": 1749375758.614986,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -318,8 +309,8 @@
     "perf_test_34": {
       "key": "perf_test_34",
       "value": "test_value_34",
-      "created_at": 1749306232.9369483,
-      "accessed_at": 1749306232.9369483,
+      "created_at": 1749375758.6174705,
+      "accessed_at": 1749375758.6174705,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -327,8 +318,8 @@
     "perf_test_35": {
       "key": "perf_test_35",
       "value": "test_value_35",
-      "created_at": 1749306232.940755,
-      "accessed_at": 1749306232.940755,
+      "created_at": 1749375758.6192832,
+      "accessed_at": 1749375758.6192832,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -336,8 +327,8 @@
     "perf_test_36": {
       "key": "perf_test_36",
       "value": "test_value_36",
-      "created_at": 1749306232.944648,
-      "accessed_at": 1749306232.944648,
+      "created_at": 1749375758.6215541,
+      "accessed_at": 1749375758.6215541,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -345,8 +336,8 @@
     "perf_test_37": {
       "key": "perf_test_37",
       "value": "test_value_37",
-      "created_at": 1749306232.947027,
-      "accessed_at": 1749306232.947027,
+      "created_at": 1749375758.6239483,
+      "accessed_at": 1749375758.6239483,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -354,8 +345,8 @@
     "perf_test_38": {
       "key": "perf_test_38",
       "value": "test_value_38",
-      "created_at": 1749306232.9540548,
-      "accessed_at": 1749306232.9540548,
+      "created_at": 1749375758.6267128,
+      "accessed_at": 1749375758.6267128,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -363,8 +354,8 @@
     "perf_test_39": {
       "key": "perf_test_39",
       "value": "test_value_39",
-      "created_at": 1749306232.9576335,
-      "accessed_at": 1749306232.9576335,
+      "created_at": 1749375758.6328819,
+      "accessed_at": 1749375758.6328819,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -372,8 +363,8 @@
     "perf_test_40": {
       "key": "perf_test_40",
       "value": "test_value_40",
-      "created_at": 1749306232.9611664,
-      "accessed_at": 1749306232.9611664,
+      "created_at": 1749375758.6374485,
+      "accessed_at": 1749375758.6374485,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -381,8 +372,8 @@
     "perf_test_41": {
       "key": "perf_test_41",
       "value": "test_value_41",
-      "created_at": 1749306232.9638438,
-      "accessed_at": 1749306232.9638438,
+      "created_at": 1749375758.6394641,
+      "accessed_at": 1749375758.6394641,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -390,8 +381,8 @@
     "perf_test_42": {
       "key": "perf_test_42",
       "value": "test_value_42",
-      "created_at": 1749306232.966974,
-      "accessed_at": 1749306232.966974,
+      "created_at": 1749375758.6417954,
+      "accessed_at": 1749375758.6417954,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -399,8 +390,8 @@
     "perf_test_43": {
       "key": "perf_test_43",
       "value": "test_value_43",
-      "created_at": 1749306232.9706612,
-      "accessed_at": 1749306232.9706612,
+      "created_at": 1749375758.6439927,
+      "accessed_at": 1749375758.6439927,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -408,8 +399,8 @@
     "perf_test_44": {
       "key": "perf_test_44",
       "value": "test_value_44",
-      "created_at": 1749306232.9745684,
-      "accessed_at": 1749306232.9745684,
+      "created_at": 1749375758.647681,
+      "accessed_at": 1749375758.647681,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -417,8 +408,8 @@
     "perf_test_45": {
       "key": "perf_test_45",
       "value": "test_value_45",
-      "created_at": 1749306232.9783335,
-      "accessed_at": 1749306232.9783335,
+      "created_at": 1749375758.6497056,
+      "accessed_at": 1749375758.6497056,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -426,8 +417,8 @@
     "perf_test_46": {
       "key": "perf_test_46",
       "value": "test_value_46",
-      "created_at": 1749306232.983566,
-      "accessed_at": 1749306232.983566,
+      "created_at": 1749375758.6518328,
+      "accessed_at": 1749375758.6518328,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -435,8 +426,8 @@
     "perf_test_47": {
       "key": "perf_test_47",
       "value": "test_value_47",
-      "created_at": 1749306232.9873376,
-      "accessed_at": 1749306232.9873376,
+      "created_at": 1749375758.6579158,
+      "accessed_at": 1749375758.6579158,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -444,8 +435,8 @@
     "perf_test_48": {
       "key": "perf_test_48",
       "value": "test_value_48",
-      "created_at": 1749306232.9906418,
-      "accessed_at": 1749306232.9906418,
+      "created_at": 1749375758.6608086,
+      "accessed_at": 1749375758.6608086,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -453,17 +444,26 @@
     "perf_test_49": {
       "key": "perf_test_49",
       "value": "test_value_49",
-      "created_at": 1749306233.003146,
-      "accessed_at": 1749306233.003146,
+      "created_at": 1749375758.6829855,
+      "accessed_at": 1749375758.6829855,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
     },
-    "test_key1": {
-      "key": "test_key1",
-      "value": "val1",
-      "created_at": 1749305033.5586438,
-      "accessed_at": 1749305033.5586438,
+    "k1": {
+      "key": "k1",
+      "value": "v1",
+      "created_at": 1749375735.246277,
+      "accessed_at": 1749375735.246277,
+      "access_count": 0,
+      "ttl": null,
+      "expires_at": null
+    },
+    "k2": {
+      "key": "k2",
+      "value": "v2",
+      "created_at": 1749375747.0534797,
+      "accessed_at": 1749375747.0534797,
       "access_count": 0,
       "ttl": null,
       "expires_at": null
@@ -472,9 +472,9 @@
   "stats": {
     "hits": 0,
     "misses": 0,
-    "sets": 2106,
+    "sets": 102,
     "deletes": 0,
     "evictions": 0
   },
-  "timestamp": 1749306244.3355706
+  "timestamp": 1749375889.970018
 }

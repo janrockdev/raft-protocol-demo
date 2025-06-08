@@ -620,10 +620,10 @@ class SimpleDashboard:
                 <div class="form-group">
                     <label for="target-node">Target Node</label>
                     <select id="target-node">
-                        <option value="node2">Node 2 (Port 4000)</option>
-                        <option value="node3">Node 3 (Port 5000)</option>
-                        <option value="node4">Node 4 (Port 6000)</option>
-                        <option value="node5">Node 5 (Port 7000)</option>
+                        <option value="node2">Node 2 (Port 3002)</option>
+                        <option value="node3">Node 3 (Port 3003)</option>
+                        <option value="node4">Node 4 (Port 3004)</option>
+                        <option value="node5">Node 5 (Port 3005)</option>
                     </select>
                 </div>
                 <div class="button-group">
@@ -655,7 +655,7 @@ class SimpleDashboard:
 
         <div class="card">
             <h3><i class="fas fa-terminal"></i> Activity Log</h3>
-            <div id="activity-log" class="log">Dashboard started...\n</div>
+            <div id="activity-log" class="log">Dashboard started...<br></div>
             <div class="button-group">
                 <button class="btn btn-primary" onclick="clearLog()">
                     <i class="fas fa-broom"></i> Clear Log
@@ -671,7 +671,8 @@ class SimpleDashboard:
         function log(message) {
             const logEl = document.getElementById('activity-log');
             const timestamp = new Date().toLocaleTimeString();
-            logEl.textContent += `[${timestamp}] ${message}\\n`;
+            logEl.innerHTML += `[${timestamp}] ${message}<br>`;
+            
             logEl.scrollTop = logEl.scrollHeight;
         }
 
@@ -800,7 +801,7 @@ class SimpleDashboard:
                         notification.remove();
                     }
                 }, 300);
-            }, 4000);
+            }, 3002);
         }
 
         async function refreshStatus() {
@@ -1169,7 +1170,7 @@ class SimpleDashboard:
                     `;
                 }
                 log(`Restarted node: ${node}`);
-                setTimeout(refreshStatus, 3000);
+                setTimeout(refreshStatus, 3001);
             } catch (error) {
                 resultContainer.innerHTML = `
                     <div style="color: #ef4444;">
@@ -1185,7 +1186,7 @@ class SimpleDashboard:
             const container = document.getElementById('cache-stats-container');
             try {
                 const nodes = ['node1', 'node2', 'node3', 'node4', 'node5'];
-                const ports = [3000, 4000, 5000, 6000, 7000];
+                const ports = [3001, 3002, 3003, 3004, 3005];
                 
                 let statsHtml = '<div class="stats-grid">';
                 
@@ -1306,7 +1307,7 @@ class SimpleDashboard:
         async function exportCacheStats() {
             try {
                 const nodes = ['node1', 'node2', 'node3', 'node4', 'node5'];
-                const ports = [3000, 4000, 5000, 6000, 7000];
+                const ports = [3001, 3002, 3003, 3004, 3005];
                 
                 let csvData = 'Node,Port,Status,Keys,Max_Keys,Hit_Rate_%,Hits,Misses,Total_Operations,Sets,Deletes,Evictions\\n';
                 
@@ -1352,7 +1353,7 @@ class SimpleDashboard:
         setInterval(() => {
             refreshStatus();
             refreshCacheStats();
-        }, 5000);
+        }, 3005);
         refreshStatus();
         refreshCacheStats();
     </script>

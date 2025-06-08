@@ -72,9 +72,9 @@ class ClusterManager:
         print("  GET    /health          - Health check")
         
         print("\nExample usage:")
-        print("  curl -X POST http://127.0.0.1:3000/cache/mykey -H 'Content-Type: application/json' -d '{\"value\": \"hello world\"}'")
-        print("  curl http://127.0.0.1:3000/cache/mykey")
-        print("  curl http://127.0.0.1:3000/status")
+        print("  curl -X POST http://127.0.0.1:3001/cache/mykey -H 'Content-Type: application/json' -d '{\"value\": \"hello world\"}'")
+        print("  curl http://127.0.0.1:3001/cache/mykey")
+        print("  curl http://127.0.0.1:3001/status")
         
         print("\nPress Ctrl+C to stop the cluster")
         print("="*60)

@@ -19,7 +19,7 @@ async def test_single_node_leader_behavior():
     
     try:
         # Check node1 status
-        async with session.get('http://127.0.0.1:3000/status') as resp:
+        async with session.get('http://127.0.0.1:3001/status') as resp:
             if resp.status == 200:
                 data = await resp.json()
                 raft = data.get('raft', {})
@@ -61,7 +61,7 @@ async def test_term_progression():
         measurements = []
         
         for i in range(5):
-            async with session.get('http://127.0.0.1:3000/status') as resp:
+            async with session.get('http://127.0.0.1:3001/status') as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     term = data.get('raft', {}).get('term', 0)
@@ -119,7 +119,7 @@ async def test_cache_operations_as_leader():
         for key, value in test_data:
             try:
                 async with session.post(
-                    f'http://127.0.0.1:3000/cache/{key}',
+                    f'http://127.0.0.1:3001/cache/{key}',
                     json={'value': value},
                     timeout=aiohttp.ClientTimeout(total=3)
                 ) as resp:
@@ -139,7 +139,7 @@ async def test_cache_operations_as_leader():
         for key, expected_value in test_data:
             try:
                 async with session.get(
-                    f'http://127.0.0.1:3000/cache/{key}',
+                    f'http://127.0.0.1:3001/cache/{key}',
                     timeout=aiohttp.ClientTimeout(total=2)
                 ) as resp:
                     if resp.status == 200:
@@ -186,7 +186,7 @@ async def test_performance_characteristics():
             op_start = time.time()
             try:
                 async with session.post(
-                    f'http://127.0.0.1:3000/cache/perf_{i}',
+                    f'http://127.0.0.1:3001/cache/perf_{i}',
                     json={'value': f'perf_value_{i}'},
                     timeout=aiohttp.ClientTimeout(total=2)
                 ) as resp:
@@ -231,7 +231,7 @@ async def test_cluster_metadata():
     print("-" * 40)
     
     try:
-        async with session.get('http://127.0.0.1:3000/status') as resp:
+        async with session.get('http://127.0.0.1:3001/status') as resp:
             if resp.status == 200:
                 data = await resp.json()
                 
@@ -290,7 +290,7 @@ async def test_node_restart_simulation():
     
     try:
         # Get initial state
-        async with session.get('http://127.0.0.1:3000/status') as resp:
+        async with session.get('http://127.0.0.1:3001/status') as resp:
             if resp.status == 200:
                 initial_data = await resp.json()
                 initial_term = initial_data.get('raft', {}).get('term', 0)
@@ -321,7 +321,7 @@ async def test_node_restart_simulation():
         await asyncio.sleep(5)
         
         # Check final state
-        async with session.get('http://127.0.0.1:3000/status') as resp:
+        async with session.get('http://127.0.0.1:3001/status') as resp:
             if resp.status == 200:
                 final_data = await resp.json()
                 final_term = final_data.get('raft', {}).get('term', 0)

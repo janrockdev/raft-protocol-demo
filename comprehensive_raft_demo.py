@@ -21,7 +21,7 @@ async def demonstrate_raft_consensus():
         print("\n1. CLUSTER STATE ANALYSIS")
         print("-" * 30)
         
-        nodes = {'node1': 3000, 'node2': 4000, 'node3': 5000}
+        nodes = {'node1': 3001, 'node2': 3002, 'node3': 3003}
         cluster_state = {}
         
         for name, port in nodes.items():
@@ -245,7 +245,7 @@ async def run_mini_stress_test():
     try:
         # Find leader
         leader_port = None
-        nodes = [3000, 4000, 5000]
+        nodes = [3001, 3002, 3003]
         
         for port in nodes:
             try:

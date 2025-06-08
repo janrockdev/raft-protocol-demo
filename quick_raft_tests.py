@@ -15,7 +15,7 @@ async def test_leader_election():
     
     try:
         # Check all nodes
-        nodes = [3000, 4000, 5000]
+        nodes = [3001, 3002, 3003]
         leaders = []
         
         for port in nodes:
@@ -46,7 +46,7 @@ async def test_data_replication():
         test_value = f"test_value_{random.randint(1000, 9999)}"
         
         # Write to leader (node1)
-        async with session.post(f'http://127.0.0.1:3000/cache/{test_key}',
+        async with session.post(f'http://127.0.0.1:3001/cache/{test_key}',
                                json={'value': test_value},
                                timeout=aiohttp.ClientTimeout(total=3)) as resp:
             if resp.status != 200:
@@ -57,7 +57,7 @@ async def test_data_replication():
         await asyncio.sleep(1)
         
         # Check replication on all nodes
-        nodes = [3000, 4000, 5000]
+        nodes = [3001, 3002, 3003]
         replicated_count = 0
         
         for port in nodes:
@@ -85,7 +85,7 @@ async def test_leader_failure():
     try:
         # Find current leader
         original_leader = None
-        nodes = [3000, 4000, 5000]
+        nodes = [3001, 3002, 3003]
         
         for port in nodes:
             try:
@@ -160,7 +160,7 @@ async def test_consistency_under_load():
             key = f"load_test_{i}_{int(time.time())}"
             value = f"value_{i}_{random.randint(100, 999)}"
             operations.append(
-                session.post(f'http://127.0.0.1:3000/cache/{key}',
+                session.post(f'http://127.0.0.1:3001/cache/{key}',
                            json={'value': value},
                            timeout=aiohttp.ClientTimeout(total=3))
             )
@@ -194,7 +194,7 @@ async def test_performance_metrics():
         
         for i in range(operations):
             try:
-                async with session.post(f'http://127.0.0.1:3000/cache/perf_{i}',
+                async with session.post(f'http://127.0.0.1:3001/cache/perf_{i}',
                                        json={'value': f'perf_value_{i}'},
                                        timeout=aiohttp.ClientTimeout(total=2)) as resp:
                     if resp.status == 200:

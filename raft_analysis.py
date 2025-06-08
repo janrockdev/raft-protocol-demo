@@ -36,9 +36,9 @@ class ClusterSnapshot:
 class RaftAnalyzer:
     def __init__(self):
         self.nodes = {
-            'node1': 3000,
-            'node2': 4000,
-            'node3': 5000
+            'node1': 3001,
+            'node2': 3002,
+            'node3': 3003
         }
         self.session = None
         self.snapshots = []
